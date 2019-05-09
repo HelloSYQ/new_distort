@@ -1,0 +1,41 @@
+
+%
+
+function result = ext_pointDis(imin,k)
+    im_length = length(imin);
+    imout = zeros(size(imin));
+    if mod(im_length,2) == 0
+        im_center = im_length/2;
+    else
+        im_center = (im_length+1)/2;
+    end
+    [x_o,y_o] = meshgrid(1-im_center:im_length-im_center,1-im_center:im_length-im_center);
+    k_matrix = 1+k(1)*(x_o.^2+y_o.^2)+k(2)*(x_o.^2+y_o.^2).^2;
+    
+    x_d = x_o./k_matrix+im_center;
+    y_d = y_o./k_matrix+im_center;
+    x_z = floor(x_d);
+    y_z = floor(y_d);
+    s1 = (x_z+1-x_d).*(y_z+1-y_d);
+    s3 = (x_z+1-x_d).*(y_d-y_z);
+    s2 = (x_d-x_z).*(y_z+1-y_d);
+    s4 = (x_d-x_z).*(y_d-y_z);
+    
+%    x_dis = x_o.*k_matrix+im_center;
+%    y_dis = y_o.*k_matrix+im_center;
+
+    for i = 1:im_length
+        for j = 1:im_length
+            k1 = x_z(i,j);
+            k2 = y_z(i,j);
+            if (k1+1<=im_length) && (k2+1<=im_length)
+                imout(i,j) = s1(i,j)*imin(k1,k2)+s2(i,j)*imin(k1+1,k2)+s3(i,j)*imin(k1,k2+1)+s4(i,j)*imin(k1+1,k2+1);
+            else
+                imout(i,j) = imin(k1,k2);
+            end
+        end
+    end
+%    imshow(imout,[]);
+%    imout = imout./count;
+    result = imout;
+end
