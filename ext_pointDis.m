@@ -12,7 +12,8 @@
 
 
 function result = ext_pointDis(imin,k)
-    im_length = length(imin);
+tic;    
+im_length = length(imin);
     imout = zeros(im_length,im_length);
     if mod(im_length,2) == 0
         im_center = im_length/2;
@@ -50,5 +51,6 @@ function result = ext_pointDis(imin,k)
     end
 %    imshow(imout,[]);
 %    imout = imout./count;
-    result = imout;
+toc;
+	result = imout;
 end
