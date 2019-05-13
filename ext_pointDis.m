@@ -22,10 +22,13 @@ function result = ext_pointDis(imin,k)
     [x_o,y_o] = meshgrid(1-im_center:im_length-im_center,1-im_center:im_length-im_center);
     k_matrix = 1+k(1)*(x_o.^2+y_o.^2)+k(2)*(x_o.^2+y_o.^2).^2;
     
+    % calculate the distorted coordinate
     x_d = x_o./k_matrix+im_center;
     y_d = y_o./k_matrix+im_center;
     x_z = floor(x_d);
     y_z = floor(y_d);
+    
+    %
     s1 = (x_z+1-x_d).*(y_z+1-y_d);
     s3 = (x_z+1-x_d).*(y_d-y_z);
     s2 = (x_d-x_z).*(y_z+1-y_d);
