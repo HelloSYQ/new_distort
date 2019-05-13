@@ -20,6 +20,7 @@ function result = De_pointResD(range_m,step,imn1,imn2)
             k = [i j]*step;
             im_new = ext_pointDis(im_o,k);
             value = sum(sum((im_d-im_new).^2));
+	    disp(value);
             if value<min
                 min = value;
                 kout = k;
