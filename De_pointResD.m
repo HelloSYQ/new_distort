@@ -8,7 +8,7 @@
 % output: double, 2 polynomial parameters.                             %
 % Date: 2019-05-09 ======== Author: Hellosyq                           %
 
-function result = De_pointResD(range_m,step,imn1,imn2)
+function result = De_pointResD(range_m,step1,step2,imn1,imn2)
     
     im_o = im2double(imread(imn1));
     im_d = im2double(imread(imn2));
@@ -17,7 +17,7 @@ function result = De_pointResD(range_m,step,imn1,imn2)
     % main calculation 
     for i = range_m(1):range_m(2);
         for j = range_m(3):range_m(4)
-            k = [i j]*step;
+            k = [i*step1,j*step2];
             im_new = ext_pointDis(im_o,k);
             value = sum(sum((im_d-im_new).^2));
             if value<min
