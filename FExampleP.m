@@ -14,7 +14,7 @@ function result = FExampleP(imname,nname,p)
     [X,Y] = meshgrid(1:image_size(1),1:image_size(2));
     
     image_kernel = zeros(image_size(1),image_size(2));
-    image_distorted = zeros(image_size);
+    im_distorted = zeros(image_size);
     sigma = 0.5;
     
     if mod(image_size(1),2) == 1
@@ -51,6 +51,6 @@ function result = FExampleP(imname,nname,p)
         end
     end
     toc;
-    result = image_distorted/max(max(image_distorted));
+    result = im_distorted/max(max(im_distorted));
     imwrite(result,nname);
 end
