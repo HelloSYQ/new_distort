@@ -13,18 +13,19 @@ function result = De_pointResD(range_m,step1,step2,imn1,imn2)
     im_o = im2double(imread(imn1));
     im_d = im2double(imread(imn2));
     
-    min = 10^4;
+    mini = 10^4;
     % main calculation 
     for i = range_m(1):range_m(2);
         for j = range_m(3):range_m(4)
             k = [i*step1,j*step2];
             im_new = ext_pointDis(im_o,k);
-            value = sum(sum((im_d-im_new).^2));
-            if value<min
-                min = value;
+            vF = sum(sum((im_d-im_new).^2));
+            if vF <= mini
                 kout = k;
-		disp(min);
-            end
+		disp(mini);
+		disp(kout);
+                mini = vF;
+	    end
         end
     end
 
