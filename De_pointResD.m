@@ -21,10 +21,10 @@ function result = De_pointResD(range_m,step1,step2,imn1,imn2)
             im_new = ext_pointDis(im_o,k);
             vF = sum(sum((im_d-im_new).^2));
             if vF <= mini
-                kout = k;
+            	mini = vF;
+		kout = [i,j];
 		disp(mini);
 		disp(kout);
-                mini = vF;
 	    end
         end
     end
