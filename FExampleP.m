@@ -1,11 +1,18 @@
 
 % This function simulates a image distorted by a certain rule, and gives  %
 % the distorted image as the result.                                      %
+% INPUT:                                                                  % 
+% imname: string, name of the source image.                               %
+% nname : string, name of the output image.                               %
+% p     : 1x2 double array, distortion parameter.                         %
+% noise_parameter: double, lambda of poisson noise.                       %
 % First write date forget.                                                %
 % Previous modification date: 2019-04-08                                  %
 % All rights reserved to @HelloSYQ                                        %
+% patch 20190528: add noise control                                       %
 
-function result = FExampleP(imname,nname,p)
+
+function result = FExampleP(imname,nname,p,noise_parameter)
 
     im_o = imread(imname);
     im_o = im2double(im_o);
@@ -51,6 +58,9 @@ function result = FExampleP(imname,nname,p)
         end
     end
     toc;
-    result = im_distorted/max(max(im_distorted));
+    % Add Poisson Noise;
+    Noise = poissrnd(noise_parameter,image_size(1),image_size(2));
+    result = (im_distorted+Noise)/max(max(im_distorted+Noise));
+
     imwrite(result,nname);
 end
