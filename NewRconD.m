@@ -1,3 +1,15 @@
+% This function is a reconstruction program for   %
+% Fredholm Integral model.                        %
+% INPUT:                                          %
+% range1,range2 : integer, range of the searching %
+% space;                                          %
+% step          : double, step length for search  %
+% imn1          : double array, input image.      %
+% imn2          : double array, input template.   %
+% OUTPUT:                                         %
+% reconstructed parameter, 1x2 integer array.     %
+% DATE 2019-05-28 ======= AUTHOR HELLOSYQ         %
+
 
 function result = NewRconD(range1,range2,step,imn1,imn2)
     
