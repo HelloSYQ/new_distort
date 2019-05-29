@@ -23,8 +23,8 @@ function result = De_pointResD(range_m,step1,step2,imn1,imn2)
             if vF <= mini
             	mini = vF;
 		kout = [i,j];
-		disp(mini);
-		disp(kout);
+%		disp(mini);
+%		disp(kout);
 	    end
         end
     end
