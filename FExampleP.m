@@ -10,9 +10,10 @@
 % Previous modification date: 2019-04-08                                  %
 % All rights reserved to @HelloSYQ                                        %
 % patch 20190528: add noise control                                       %
+% patch 20190530: add noise ctrl parameter: ture, false.                  %
 
 
-function result = FExampleP(imname,nname,p,noise_parameter)
+function result = FExampleP(imname,nname,p,noise_ctrl,noise_parameter)
 
     im_o = imread(imname);
     im_o = im2double(im_o);
@@ -59,8 +60,11 @@ function result = FExampleP(imname,nname,p,noise_parameter)
     end
     toc;
     % Add Poisson Noise;
-    Noise = poissrnd(noise_parameter,image_size(1),image_size(2));
-    result = (im_distorted+Noise)/max(max(im_distorted+Noise));
-
+    if (noise_ctrl == 'true')
+        Noise = poissrnd(noise_parameter,image_size(1),image_size(2));
+        result = (im_distorted+Noise)/max(max(im_distorted+Noise));
+    else
+        result = (im_distorted+Noise)/max(max(im_distorted+Noise));
+    end
     imwrite(result,nname);
 end
