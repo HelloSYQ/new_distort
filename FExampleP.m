@@ -63,8 +63,10 @@ function result = FExampleP(imname,nname,p,noise_ctrl,noise_parameter)
     if (noise_ctrl == 'true')
         Noise = poissrnd(noise_parameter,image_size(1),image_size(2));
         result = (im_distorted+Noise)/max(max(im_distorted+Noise));
-    else
+    elseif (noise_ctrl == 'false')
         result = (im_distorted+Noise)/max(max(im_distorted+Noise));
+    else 
+	result = 'error!';
     end
     imwrite(result,nname);
 end
