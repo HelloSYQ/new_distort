@@ -11,7 +11,8 @@
 % All rights reserved to @HelloSYQ                                        %
 % patch 20190528: add noise control                                       %
 % patch 20190530: add noise ctrl parameter: ture, false.                  %
-
+% patch 20190603: use strcmp instead of '==' for string compare, cancel   % 
+%                 preallocate for image_kernel.                           %
 
 function result = FExampleP(imname,nname,p,noise_ctrl,noise_parameter)
 
@@ -21,7 +22,6 @@ function result = FExampleP(imname,nname,p,noise_ctrl,noise_parameter)
     image_size = size(im_o);
     [X,Y] = meshgrid(1:image_size(1),1:image_size(2));
     
-    image_kernel = zeros(image_size(1),image_size(2));
     im_distorted = zeros(image_size);
     sigma = 0.5;
     
@@ -60,11 +60,11 @@ function result = FExampleP(imname,nname,p,noise_ctrl,noise_parameter)
     end
     toc;
     % Add Poisson Noise;
-    if (noise_ctrl == 'true')
+    if (strcmp(noise_ctrl,'true'))
         Noise = poissrnd(noise_parameter,image_size(1),image_size(2));
         result = (im_distorted+Noise)/max(max(im_distorted+Noise));
-    elseif (noise_ctrl == 'false')
-        result = (im_distorted+Noise)/max(max(im_distorted+Noise));
+    elseif (strcmp(noise_ctrl,'false'))
+        result = (im_distorted)/max(max(im_distorted));
     else 
 	result = 'error!';
     end
