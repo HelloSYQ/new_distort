@@ -1,10 +1,11 @@
 % This jiaoben is designed to run a auto check between the reconstructed image %
 % and the distortion template.                                                 %
 
-p1 = [-18,-23];
-p2 = [181,150];
-r1 = FExampleP('pointsr.png','fredrec_noi.png',p1);
-r2 = ext_pointDis('pointsr.png','pointrec_noi.png',p2);
+p1 = [-18,-23]*10^-12;
+p2 = [181*10-9,150*10-13];
+sr = im2double(imread('pointsr.png'));
+r1 = FExampleP('pointsr.png','fredrec_noi.png',p1,'false',0.0001);
+r2 = ext_pointDis(sr,p2);
 
 sor = im2double(imread('demo_noise1.png'));
 
