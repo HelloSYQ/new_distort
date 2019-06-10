@@ -2,7 +2,7 @@
 % and the distortion template.                                                 %
 
 p1 = [-18,-23]*10^-12;
-p2 = [181*10-9,150*10-13];
+p2 = [1.83e-7,1.497e-11];
 sr = im2double(imread('pointsr.png'));
 r1 = FExampleP('pointsr.png','fredrec_noi.png',p1,'false',0.0001);
 r2 = ext_pointDis(sr,p2);
