@@ -1,6 +1,8 @@
 
 % This function simulates a image distorted by a certain rule, and gives  %
 % the distorted image as the result.                                      %
+% This function simulates a image distorted by a certain rule, and gives  %
+% the distorted image as the result.                                      %
 % INPUT:                                                                  % 
 % imname: string, name of the source image.                               %
 % nname : string, name of the output image.                               %
@@ -59,9 +61,13 @@ function result = FExampleP(imname,nname,p,noise_ctrl,noise_parameter)
         end
     end
     toc;
-    % Add Poisson Noise;
+    % Add Possion Noise;
+    % Possion Noise should be rescaled instead of adding directly.
+    % scale of noise to image preset to 1:1e5;
+    
+    Noise_scale = 1e5;
     if (strcmp(noise_ctrl,'true'))
-        Noise = poissrnd(noise_parameter,image_size(1),image_size(2));
+        Noise = poissrnd(noise_parameter,image_size(1),image_size(2))/Noise_scale;
         result = (im_distorted+Noise)/max(max(im_distorted+Noise));
     elseif (strcmp(noise_ctrl,'false'))
         result = (im_distorted)/max(max(im_distorted));
