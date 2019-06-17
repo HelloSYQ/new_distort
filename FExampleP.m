@@ -1,6 +1,3 @@
-
-% This function simulates a image distorted by a certain rule, and gives  %
-% the distorted image as the result.                                      %
 % This function simulates a image distorted by a certain rule, and gives  %
 % the distorted image as the result.                                      %
 % INPUT:                                                                  % 
@@ -8,6 +5,7 @@
 % nname : string, name of the output image.                               %
 % p     : 1x2 double array, distortion parameter.                         %
 % noise_parameter: double, lambda of poisson noise.                       %
+% Noise_scale    : double, scale the value of image and noise maximum.    %
 % First write date forget.                                                %
 % Previous modification date: 2019-04-08                                  %
 % All rights reserved to @HelloSYQ                                        %
@@ -15,8 +13,9 @@
 % patch 20190530: add noise ctrl parameter: ture, false.                  %
 % patch 20190603: use strcmp instead of '==' for string compare, cancel   % 
 %                 preallocate for image_kernel.                           %
+% patch 20190617: add noise sacle parameter.                              %
 
-function result = FExampleP(imname,nname,p,noise_ctrl,noise_parameter)
+function result = FExampleP(imname,nname,p,noise_ctrl,noise_parameter,Noise_scale)
 
     im_o = imread(imname);
     im_o = im2double(im_o);
@@ -64,11 +63,11 @@ function result = FExampleP(imname,nname,p,noise_ctrl,noise_parameter)
     % Add Possion Noise;
     % Possion Noise should be rescaled instead of adding directly.
     % scale of noise to image preset to 1:1e5;
+    % Noise_scale set to be input parameter;
     
-    Noise_scale = 1e5;
     if (strcmp(noise_ctrl,'true'))
-        Noise = poissrnd(noise_parameter,image_size(1),image_size(2))/Noise_scale;
-        result = (im_distorted+Noise)/max(max(im_distorted+Noise));
+        Noise = poissrnd(noise_parameter,image_size(1),image_size(2));
+        result = (Noise_scale*im_distorted+Noise)/max(max(Noise_scale*im_distorted+Noise));
     elseif (strcmp(noise_ctrl,'false'))
         result = (im_distorted)/max(max(im_distorted));
     else 
