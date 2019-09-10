@@ -41,7 +41,6 @@ function result = FdnewValueF(a_F,im_o,im_d,cigma)
 
 
     % calculting the distortion image
-    image_kernel()
     for i = 1:image_size(1)
         image_kernel = temp1(:,i).*temp2;
         im_r(:,i) = (line_im_o*image_kernel)';
