@@ -24,7 +24,7 @@ function result = FdnewValueF(a_F,im_o,im_d,cigma)
     pa = -1/(2*cigma*cigma);
     
     % time consuming
-    tic;
+  %  tic;
     temp1 = zeros(image_size(1)*image_size(2),image_size(1));
     temp2 = zeros(image_size(1)*image_size(2),image_size(1));
     line_size = image_size(1)*image_size(2);
@@ -38,15 +38,16 @@ function result = FdnewValueF(a_F,im_o,im_d,cigma)
         temp2(:,i) = reshape(tep2(:,:),[line_size,1]);
     end
     line_im_o = reshape(im_o,[1,line_size]);
-
-
+	
+    tic;
     % calculting the distortion image
     for i = 1:image_size(1)
         image_kernel = temp1(:,i).*temp2;
-        im_r(:,i) = (line_im_o*image_kernel)';
+        im_r(i,:) = (line_im_o*image_kernel);
     end
     toc;
-    im_r = im_r/(max(max(im_r)));
+    im_r = im_r'/(max(max(im_r)));
+    imwrite(im_r,'testimage.png');
     result = sum(sum((im_d-im_r).^2));
 %    result = im_r;
 end
