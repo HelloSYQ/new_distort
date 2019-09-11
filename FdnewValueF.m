@@ -10,6 +10,8 @@ function result = FdnewValueF(a_F,im_o,im_d,cigma)
     image_size = size(im_o);
     im_r = zeros(image_size);
     [X,Y] = meshgrid(1:image_size(1),1:image_size(2));
+    LOG_SCALE = 1e4;
+
     % center of the image
     if mod(image_size(1),2) == 1
         im_c = (image_size(1)+1)/2;
@@ -24,7 +26,7 @@ function result = FdnewValueF(a_F,im_o,im_d,cigma)
     pa = -1/(2*cigma*cigma);
     
     % time consuming
-  %  tic;
+    % tic;
     temp1 = zeros(image_size(1)*image_size(2),image_size(1));
     temp2 = zeros(image_size(1)*image_size(2),image_size(1));
     line_size = image_size(1)*image_size(2);
@@ -47,7 +49,7 @@ function result = FdnewValueF(a_F,im_o,im_d,cigma)
     end
     toc;
     im_r = im_r'/(max(max(im_r)));
-    imwrite(im_r,'testimage.png');
-    result = sum(sum((im_d-im_r).^2));
+    Value = sum(sum((im_d-im_r).^2))
+    result = log(Value/LOG_SCALE);
 %    result = im_r;
 end
