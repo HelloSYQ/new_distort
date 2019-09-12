@@ -4,6 +4,10 @@
 % image im_o and distorted image im_d, sigma of the PSF.         %
 % Output the error of the a_F reconstructed image and distorted  %
 % image.                                                         %
+% 20190912 RECENT UPDATES:                                       %
+% 1. reduce the main loop to 1.                                  %
+% 2. set a log Value Function to make it sharper in ROI.         %
+
 
 function result = FdnewValueF(a_F,im_o,im_d,cigma)
 
