@@ -14,7 +14,6 @@ function result = FdnewValueF(a_F,im_o,im_d,cigma)
     image_size = size(im_o);
     im_r = zeros(image_size);
     [X,Y] = meshgrid(1:image_size(1),1:image_size(2));
-    LOG_SCALE = 1e4;
 
     % center of the image
     if mod(image_size(1),2) == 1
@@ -57,6 +56,6 @@ function result = FdnewValueF(a_F,im_o,im_d,cigma)
     toc;
     im_r = im_r'/(max(max(im_r)));
     Value = sum(sum((im_d-im_r).^2));
-    result = log(Value/LOG_SCALE);
+    result = Value;
 %    result = im_r;
 end
