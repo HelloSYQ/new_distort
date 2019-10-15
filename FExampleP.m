@@ -14,12 +14,14 @@
 % patch 20190603: use strcmp instead of '==' for string compare, cancel   % 
 %                 preallocate for image_kernel.                           %
 % patch 20190617: add noise sacle parameter.                              %
+% patch 20191014: add generating a series of noise images.                %
+% The default location of the noise images are /LAB/git/new_distort/noise %
 
-function result = FExampleP(imname,nname,p,noise_ctrl,noise_parameter,Noise_scale)
+
+function result = FExampleP(imname,p,noise_ctrl,noise_parameter,Noise_scale,Num)
 
     im_o = imread(imname);
     im_o = im2double(im_o);
-    %image_gray = rgb2gray(image_origin);
     image_size = size(im_o);
     [X,Y] = meshgrid(1:image_size(1),1:image_size(2));
     
@@ -33,7 +35,6 @@ function result = FExampleP(imname,nname,p,noise_ctrl,noise_parameter,Noise_scal
     end
     X1 = X - im_c;
     Y1 = Y - im_c;
-    tic; 
     K1 = p(1)*(X1.^2+Y1.^2)+p(2)*(X1.^4+Y1.^4+2*X1.^2.*Y1.^2);
     temp1 = zeros(image_size(1)*image_size(2),image_size(1));
     temp2 = zeros(image_size(1)*image_size(2),image_size(1));
@@ -59,7 +60,6 @@ function result = FExampleP(imname,nname,p,noise_ctrl,noise_parameter,Noise_scal
             im_distorted(i,j) = im_distorted(j,i);
         end
     end
-    toc;
     % Add Possion Noise;
     % Possion Noise should be rescaled instead of adding directly.
     % scale of noise to image preset to 1:1e5;
@@ -73,5 +73,4 @@ function result = FExampleP(imname,nname,p,noise_ctrl,noise_parameter,Noise_scal
     else 
 	result = 'error!';
     end
-    imwrite(result,nname);
 end
