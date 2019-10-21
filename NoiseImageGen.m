@@ -14,13 +14,13 @@
 % Author : HelloSYQ                                                       %
 % The default location of the noise images are /LAB/git/new_distort/noise %
 
-function result = NoiseImageGen(imname,p,noise_parameter,N,Noise_scale,Num)
+function result = NoiseImageGen(imname,p,noise_parameter,Noise_scale,Num)
     Image_Temp = TempGen(imname,p);
-    image_size = size(Image_temp);
-    for i = 1:N
+    image_size = size(Image_Temp);
+    for i = 1:Num
 	Noise = poissrnd(noise_parameter(i),image_size(1),image_size(2));
     	Noise_Image = (Noise_scale*Image_Temp+Noise)/max(max(Noise_scale*Image_Temp+Noise));
-	Image_Name = './noise/Noise_Image'+num2str(i)+'.png';
+	Image_Name = ['./noise/Noise_Image',num2str(i),'.png'];
 	imwrite(Noise_Image,Image_Name);
     end
 end
