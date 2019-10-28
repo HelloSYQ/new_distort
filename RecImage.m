@@ -33,7 +33,7 @@ function result = RecImage(file_path,img_src,x0,lb,hb)
     % finding the polynomial parameters using 'FMINCON' function
     for j = 1:Img_Num
 	Img_Rec(3,j) = Img_RecM(Img_Src,Img(j,:,:),x0,lb,hb);
-	Img_Rec(1,j) = DisCalM(Img_Src,ImgRec(3,j),'False',0,0);
+	Img_Rec(1,j) = TempGen(Img_Src,ImgRec(3,j));
 	Img_Rec(2,j) = Img_Rec(1,j) - Img(j,:,:);
     end
 
