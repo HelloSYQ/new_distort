@@ -25,7 +25,7 @@ function result = FdnewValueF(a_F,im_o,im_d,cigma)
     X1 = X - im_c;
     Y1 = Y - im_c;
 	
-    SCALE = 1e-12;
+    SCALE = 1e-11;
     a_F = a_F*SCALE;
     % distortion parameter
     K1 = a_F(1)*(X1.^2+Y1.^2)+a_F(2)*(X1.^4+Y1.^4+2*X1.^2.*Y1.^2);
