@@ -24,17 +24,18 @@ function result = RecImage(file_path,img_src,x0,lb,hb)
     Img_Rec = cell(3,Img_Num);
     Img = zeros(Img_Num,Img_Size(1),Img_Size(2));
     
-    % reading in all images to be reconstructed in double.
+    % reading all images to be reconstructed in double.
     for j = 1:Img_Num
 	img_name = Img_List(j).name;
 	Img(j,:,:) = im2double(imread(strcat(file_path,img_name)));
     end
-    
+    rec_para = [0,0];
     % finding the polynomial parameters using 'FMINCON' function
     for j = 1:Img_Num
-	Img_Rec(3,j) = Img_RecM(Img_Src,Img(j,:,:),x0,lb,hb);
-	Img_Rec(1,j) = TempGen(Img_Src,ImgRec(3,j));
-	Img_Rec(2,j) = Img_Rec(1,j) - Img(j,:,:);
+	rec_para = Img_RecM(Img_Src,Img(j,:,:),x0,lb,hb);
+	Img_Rec(3,j) = {rec_para};
+	Img_Rec(1,j) = {TempGen(Img_Src,ImgRec(3,j))};
+	Img_Rec(2,j) = {Img_Rec(1,j) - Img(j,:,:)};
     end
 
     result = Img_Rec;

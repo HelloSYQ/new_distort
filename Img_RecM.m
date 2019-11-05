@@ -19,7 +19,7 @@
 function result = Img_RecM(img_src,template,x0,lb,hb)
 
     cigma = 0.5;
-    fun = @(X)FdnewValueF(X,img_src,template,cigma);
+    fun = @(X)ValueF(X,img_src,template,cigma);
     
     A = [];
     b = [];
