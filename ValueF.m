@@ -51,8 +51,9 @@ function result = ValueF(a_F,im_o,im_d,cigma)
         image_kernel = temp1(:,i).*temp2;
         im_r(i,:) = (line_im_o*image_kernel);
     end
-    im_r = im_r'/(max(max(im_r)));
-    __Value = sum(sum((im_d-im_r).^2));
-    disp(__Value);
-    result = __Value;
+    im_r = im_r'/max(im_r(:));
+    v_s = (im_d - im_r).^2;
+    Value = sum(v_s(:));
+    disp(Value);
+    result = Value;
 end
