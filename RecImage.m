@@ -29,7 +29,6 @@ function result = RecImage(file_path,img_src,x0,lb,hb)
 	img_name = Img_List(j).name;
 	Img(j,:,:) = im2double(imread(strcat(file_path,img_name)));
     end
-    rec_para = [0,0];
     % finding the polynomial parameters using 'FMINCON' function
     for j = 1:Img_Num
 	rec_para = Img_RecM(Img_Src,Img(j,:,:),x0,lb,hb);
