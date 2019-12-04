@@ -15,7 +15,8 @@
 % The default location of the noise images are /LAB/git/new_distort/noise %
 
 function result = NoiseImageGen(imname,p,noise_parameter,Noise_scale,Num)
-    Image_Temp = TempGen(imname,p);
+    Image_Src = im2double(imread(imname));
+    Image_Temp = TempGen(Image_Src,p);
     image_size = size(Image_Temp);
     for i = 1:Num
 	Noise = poissrnd(noise_parameter(i),image_size(1),image_size(2));
