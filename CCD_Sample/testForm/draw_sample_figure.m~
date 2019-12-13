@@ -1,0 +1,23 @@
+
+
+figure;
+subplot(321);
+bar(z);
+title('Ideal Gaussian Signal')
+grid on;
+set(gca,'FontSize',14);
+subplot(323);
+bar(zint);
+title('CCD Sampled Gaussian Signal')
+grid on;
+set(gca,'FontSize',14);
+subplot(325);
+bar(zinv);
+title('Recovered Gaussian Signal from Sample')
+grid on;
+set(gca,'FontSize',14);
+subplot(322);
+
+
+subplot(324);
+subplot(326);
