@@ -52,7 +52,7 @@ function result = ValueF(a_F,im_o,im_d,cigma)
         im_r(i,:) = (line_im_o*image_kernel);
     end
     im_r = im_r'/max(im_r(:));
-    v_s = (im_d - im_r).^2;
+    v_s = ((im_d - im_r).^2)./(im_d.^2);
     Value = sum(v_s(:));
     disp(Value);
     result = Value;
