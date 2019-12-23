@@ -15,10 +15,11 @@
 %                 preallocate for image_kernel.                           %
 % patch 20190617: add noise sacle parameter.                              %
 % patch 20191014: add generating a series of noise images.                %
+% patch 20191223: add if statement to reduce the calculation.             %
 % The default location of the noise images are /LAB/git/new_distort/noise %
 
 
-function result = FExampleP(imname,p,noise_ctrl,noise_parameter,Noise_scale,Num)
+function result = FExampleP(imname,p,noise_ctrl,noise_parameter,Noise_scale)
     tic;
     im_o = imread(imname);
     im_o = im2double(im_o);
@@ -40,6 +41,7 @@ function result = FExampleP(imname,p,noise_ctrl,noise_parameter,Noise_scale,Num)
     temp2 = zeros(image_size(1)*image_size(2),image_size(1));
     line_size = image_size(1)*image_size(2);
     pa = -1/(2*sigma^2);
+    toc;
 
     % Calculating the kernel.
     for i = 1:image_size(1)
@@ -51,11 +53,12 @@ function result = FExampleP(imname,p,noise_ctrl,noise_parameter,Noise_scale,Num)
         temp2(:,i) = reshape(tep2(:,:),[line_size,1]);
     end
     line_im_o = reshape(im_o,[line_size,1]);
+    toc;
 
     % Calculating the distorted image.
     for i = 1:image_size(1)
         for j = i:image_size(2)
-            if (line_im_o(temp1(:,i)>0&temp2(:,j)>0)>0)
+            if (line_im_o(temp1(:,i)>0&temp2(:,j)>0)>1e-5)
 	    	image_kernel = temp1(:,i).*temp2(:,j);
             	im_distorted(j,i) = line_im_o'*image_kernel;
             	im_distorted(i,j) = im_distorted(j,i);
