@@ -19,7 +19,7 @@
 
 
 function result = FExampleP(imname,p,noise_ctrl,noise_parameter,Noise_scale,Num)
-
+    tic;
     im_o = imread(imname);
     im_o = im2double(im_o);
     image_size = size(im_o);
@@ -55,11 +55,14 @@ function result = FExampleP(imname,p,noise_ctrl,noise_parameter,Noise_scale,Num)
     % Calculating the distorted image.
     for i = 1:image_size(1)
         for j = i:image_size(2)
-            image_kernel = temp1(:,i).*temp2(:,j);
-            im_distorted(j,i) = line_im_o'*image_kernel;
-            im_distorted(i,j) = im_distorted(j,i);
+            if (line_im_o(temp1(:,i)>0&temp2(:,j)>0)>0)
+	    	image_kernel = temp1(:,i).*temp2(:,j);
+            	im_distorted(j,i) = line_im_o'*image_kernel;
+            	im_distorted(i,j) = im_distorted(j,i);
+	    end
         end
     end
+    toc;
     % Add Possion Noise;
     % Possion Noise should be rescaled instead of adding directly.
     % scale of noise to image preset to 1:1e5;
