@@ -59,11 +59,11 @@ function result = FExampleP(imname,p,noise_ctrl,noise_parameter,Noise_scale)
     for i = 1:image_size(1)
 	if (line_im_o(temp1(:,i)>0)>0)
 	for j = i:image_size(2)
-            if (line_im_o(temp1(:,i)>0&temp2(:,j)>0)>1e-5)
+%            if (line_im_o(temp1(:,i)>0&temp2(:,j)>0)>0)
 	    	image_kernel = temp1(:,i).*temp2(:,j);
             	im_distorted(j,i) = line_im_o'*image_kernel;
             	im_distorted(i,j) = im_distorted(j,i);
-	    end
+%	    end
         end
 	end
     end
@@ -77,7 +77,7 @@ function result = FExampleP(imname,p,noise_ctrl,noise_parameter,Noise_scale)
         Noise = poissrnd(noise_parameter,image_size(1),image_size(2));
         result = (Noise_scale*im_distorted+Noise)/max(max(Noise_scale*im_distorted+Noise));
     elseif (strcmp(noise_ctrl,'false'))
-        result = (im_distorted)/max(max(im_distorted));
+        result = (im_distorted)/max(im_distorted(:));
     else 
 	result = 'error!';
     end
