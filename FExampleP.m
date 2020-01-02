@@ -57,13 +57,11 @@ function result = FExampleP(imname,p,noise_ctrl,noise_parameter,Noise_scale)
 
     % Calculating the distorted image.
     for i = 1:image_size(1)
-	if (line_im_o(temp1(:,i)>0)>0)
+	if sum(line_im_o(temp1(:,i)>0))>0
 	for j = i:image_size(2)
-%            if (line_im_o(temp1(:,i)>0&temp2(:,j)>0)>0)
 	    	image_kernel = temp1(:,i).*temp2(:,j);
             	im_distorted(j,i) = line_im_o'*image_kernel;
             	im_distorted(i,j) = im_distorted(j,i);
-%	    end
         end
 	end
     end
