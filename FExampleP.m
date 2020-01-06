@@ -16,6 +16,7 @@
 % patch 20190617: add noise sacle parameter.                              %
 % patch 20191014: add generating a series of noise images.                %
 % patch 20191223: add if statement to reduce the calculation.             %
+% patch 20200106: bug fixed for if-statement and the NAN problem.         %
 % The default location of the noise images are /LAB/git/new_distort/noise %
 
 
@@ -57,7 +58,7 @@ function result = FExampleP(imname,p,noise_ctrl,noise_parameter,Noise_scale)
 
     % Calculating the distorted image.
     for i = 1:image_size(1)
-	if sum(line_im_o(temp1(:,i)>0))>0
+	if any(line_im_o(temp1(:,i)>0)>0)
 	for j = i:image_size(2)
 	    	image_kernel = temp1(:,i).*temp2(:,j);
             	im_distorted(j,i) = line_im_o'*image_kernel;
@@ -75,8 +76,11 @@ function result = FExampleP(imname,p,noise_ctrl,noise_parameter,Noise_scale)
         Noise = poissrnd(noise_parameter,image_size(1),image_size(2));
         result = (Noise_scale*im_distorted+Noise)/max(max(Noise_scale*im_distorted+Noise));
     elseif (strcmp(noise_ctrl,'false'))
-        result = (im_distorted)/max(im_distorted(:));
+        if max(im_distorted(:)) ~= 0
+            result = (im_distorted)/max(im_distorted(:));
+        else
+            result = im_distorted;
+        end
     else 
-	result = 'error!';
-    end
+
 end
