@@ -54,8 +54,9 @@ function result = FExampleP(imname,mode_flag,p,noise_ctrl,noise_parameter,Noise_
                         T = j;
                         tep1(:,:) = exp(pa*((S-X).*(S-X)));
                         tep2(:,:) = exp(pa*((T-Y).*(T-Y)));
-                        im_distorted = im_distorted+im_o(i,j)*tep1.*tep2;
-                    end
+                        norm_ker = tep1.*tep2/sum(tep1(:).*tep2(:));
+                        im_distorted = im_distorted+im_o(i,j)*norm_ker;
+		    end
                 end
             end
         
@@ -71,7 +72,8 @@ function result = FExampleP(imname,mode_flag,p,noise_ctrl,noise_parameter,Noise_
                         T = j+(j-im_c)*K2;
                         tep1(:,:) = exp(pa*((S-X).*(S-X)));
                         tep2(:,:) = exp(pa*((T-Y).*(T-Y)));
-                        im_distorted = im_distorted+im_o(i,j)*tep1.*tep2;
+                        norm_ker = tep1.*tep2/sum(tep1(:).*tep2(:));
+                        im_distorted = im_distorted+im_o(i,j)*norm_ker;
                     end
                 end
 
@@ -89,7 +91,8 @@ function result = FExampleP(imname,mode_flag,p,noise_ctrl,noise_parameter,Noise_
                         T = j+(j-im_c)*K_log2;
                         tep1(:,:) = exp(pa*((S-X).*(S-X)));
                         tep2(:,:) = exp(pa*((T-Y).*(T-Y)));
-                        im_distorted = im_distorted+im_o(i,j)*tep1.*tep2;
+                        norm_ker = tep1.*tep2/sum(tep1(:).*tep2(:));
+                        im_distorted = im_distorted+im_o(i,j)*norm_ker;
                     end
                 end
             end
