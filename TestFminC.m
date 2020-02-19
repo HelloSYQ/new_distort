@@ -16,13 +16,13 @@
 
 
 
-function result = TestFminC(source_image,template,x0,lb,hb)
+function result = TestFminC(source_image,template,expand_D,x0,lb,hb)
 
     tic;
     im_o = im2double(imread(source_image));
     im_d = im2double(imread(template));
-    cigma = 0.5;
-    fun = @(X)FdnewValueF(X,im_o,im_d,cigma);
+    cigma = 10;
+    fun = @(X)ValueF(X,im_o,im_d,expand_D,cigma);
     
     A = [];
     b = [];

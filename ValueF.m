@@ -8,10 +8,14 @@
 % 1. reduce the main loop to 1.                                  %
 
 
-function result = ValueF(p,im_o,im_d,cigma)
+function result = ValueF(p,img_src,im_d,expand_D,cigma)
 
+    img_src = im2double(img_src);
+    img_size = size(img_src);
+    im_o = zeros(img_size(1)+2*expand_D,img_size(2)+2*expand_D);
+    im_o(expand_D+1:img_size(1)+expand_D,expand_D+1:img_size(1)+expand_D) = img_src;
     image_size = size(im_o);
-    im_r = zeros(image_size);
+    im_s = zeros(image_size);
     [X,Y] = meshgrid(1:image_size(1),1:image_size(2));
 
     % center of the image
@@ -22,7 +26,10 @@ function result = ValueF(p,im_o,im_d,cigma)
     end
     
     X1 = X - im_c;
-    Y1 = Y - im_c;i
+    Y1 = Y - im_c;
+    
+    SCALE = [1e-6,1e-12,1e-6,1e-12,1e-8,1e-8];
+    p = SCALE.*p;
 
     % distortion model
     pa = -1/(2*cigma^2);
@@ -37,13 +44,18 @@ function result = ValueF(p,im_o,im_d,cigma)
                 T = j+(j-im_c)*K2;
                 tep1(:,:) = exp(pa*((S-X).*(S-X)));
                 tep2(:,:) = exp(pa*((T-Y).*(T-Y)));
-                im_r = im_r+im_o(i,j)*tep1.*tep2;
+                norm_ker = tep1.*tep2/sum(tep1(:).*tep2(:));
+		im_s = im_s+im_o(i,j)*norm_ker;
             end
         end
     end
+    im_r = im_s(expand_D+1:img_size(1)+expand_D,expand_D+1:img_size(1)+expand_D);
     
+    % calculate the mean noise signal
+    mean_noise = (sum(im_d(:)) - sum(img_src(:)))/(image_size(1)*image_size(2));
+
     % calculating value function
-    v_s = (im_d - im_r).^2);
+    v_s = (im_d - im_r - mean_noise).^2;
     Value = sum(v_s(:));
     result = Value;
 end
