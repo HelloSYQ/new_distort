@@ -8,14 +8,13 @@
 % Output:                                                         %
 %        reconstruction value: 1x2 double                         %
 % Versions:                                                       %
-%        20190916: Add comments for this function. Add a time     %
-%                  consumer in the function.                      %
+%        20200224    : Matrix version for fmincon recon test.     %
 % Author: HelloSYQ                                                %
 
 
 
 
-function result = TestFminC_M(filename,sourcename,img_src_name,FLUX,expand_D,x0,lb,hb)
+function result = TestFminC_M(filename,sourcename,img_src_name,mode_flag,kaisq_flag,FLUX,expand_D,x0,lb,hb,lambda)
 
     rec_file = load(filename,sourcename);
     img_rec = rec_file.(sourcename);
@@ -23,7 +22,7 @@ function result = TestFminC_M(filename,sourcename,img_src_name,FLUX,expand_D,x0,
     cigma = 10;
 
     tic;
-    fun = @(X)ValueF_M(X,FLUX,img_src,img_rec,expand_D,cigma);
+    fun = @(X)ValueF_M(X,mode_flag,kaisq_flag,FLUX,img_src,img_rec,expand_D,cigma);
     
     A = [];
     b = [];
@@ -33,4 +32,7 @@ function result = TestFminC_M(filename,sourcename,img_src_name,FLUX,expand_D,x0,
     options = optimoptions('fmincon','Display','iter','Algorithm','sqp');
     result = fmincon(fun,x0,A,b,Aeq,beq,lb,hb,nonlcon,options);
     toc;
+    img_tmp = FDis_Sim('testsr.png','multi_poly',result*1e-6,1e5,50,'false',0);
+    K2 = sum(sum((img_rec-img_tmp).^2/lambda));
+    disp(K2);
 end

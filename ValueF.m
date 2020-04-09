@@ -8,7 +8,7 @@
 % 1. reduce the main loop to 1.                                  %
 
 
-function result = ValueF(p,img_src,im_d,expand_D,cigma)
+function result = ValueF(p,FLUX,img_src,im_d,expand_D,cigma)
 
     img_src = im2double(img_src);
     img_size = size(img_src);
@@ -49,10 +49,13 @@ function result = ValueF(p,img_src,im_d,expand_D,cigma)
             end
         end
     end
-    im_r = im_s(expand_D+1:img_size(1)+expand_D,expand_D+1:img_size(1)+expand_D);
+
+    % Add Flux to distortion image
+    im_r = FLUX*im_s(expand_D+1:img_size(1)+expand_D,expand_D+1:img_size(1)+expand_D);
     
     % calculate the mean noise signal
     mean_noise = (sum(im_d(:)) - sum(img_src(:)))/(image_size(1)*image_size(2));
+    disp(mean_noise);
 
     % calculating value function
     v_s = (im_d - im_r - mean_noise).^2;
