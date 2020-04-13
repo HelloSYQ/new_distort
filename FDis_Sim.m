@@ -45,39 +45,51 @@ function result = FDis_Sim(imname,mode_flag,p,FLUX,expand_D,noise_ctrl,noise_par
     pa = -1/(2*sigma^2);
     
 % USE mode_flag to run Simulation for different requists.
-    switch mode_flag
-        % Calculating the distorted kernel and image for single polynomial.
-        case 'single_poly'
+   switch mode_flag
+   % Calculating the distorted kernel and image for single polynomial.
+   	case 'single_poly'
             disp('call single poly');
-            Ks1 = p(1)*X1+p(2)*Y1+p(3)*X1.^2+p(4)*Y1.^2+p(5)*X1.*Y1;
-            Ks2 = p(6)*X1.^2+p(7)*Y1.^2+p(8)*X1.*Y1;
-            for i = 1:imo_size(1)
-                for j = 1:imo_size(2)
-                    if im_o(i,j)~=0
-                        S = i+Ks1.*(i-im_c)+Ks2.*(i-im_c)^2;
-                        T = j;
-                        tep1(:,:) = exp(pa*((S-X).*(S-X)));
-                        tep2(:,:) = exp(pa*((T-Y).*(T-Y)));
-                        norm_ker = tep1.*tep2/sum(tep1(:).*tep2(:));
-                        im_distorted = im_distorted+im_o(i,j)*norm_ker;
-		    end
+            Ks1 = p(1)*U1+p(2)*V1+p(3)*U1.^2+p(4)*V1.^2+p(5)*U1.*V1;
+            Ks2 = p(6)*U1.^2+p(7)*V1.^2+p(8)*U1.*V1;
+            for x = 1:imo_size(1)
+                for y = 1:imo_size(2)
+                    if im_o(x,y)~=0
+                        S = U1+Ks1.*(x-im_c)+Ks2.*(x-im_c)^2;
+                        T = V1;
+                        tep1(:,:) = exp(pa*((S-(x-im_c)).*(S-(x-im_c))));
+                        tep2(:,:) = exp(pa*((T-(y-im_c)).*(T-(y-im_c))));
+                        norm_tep = sum(tep1(:).*tep2(:));
+                        if (norm_tep~= 0)
+                            norm_ker = tep1.*tep2/norm_tep;
+                        else
+                            norm_ker = tep1.*tep2;
+                        end
+                        im_distorted = im_distorted+im_o(x,y)*norm_ker;
+                    end
                 end
             end
         
         % Calculating the distorted kernel and image for multi-polynomials.
-        case 'multi_poly'
+	case 'multi_poly'
             disp('call multi poly');
-            K1 = p(1)*(X1.^2+Y1.^2)+p(2)*(X1.^4+Y1.^4+2*X1.^2.*Y1.^2)+p(5)*X1.^3;
-            K2 = p(3)*(X1.^2+Y1.^2)+p(4)*(X1.^4+Y1.^4+2*X1.^2.*Y1.^2)+p(6)*Y1.^3;
-            for i = 1:imo_size(1)
-                for j = 1:imo_size(2)
-                    if im_o(i,j)~=0
-                        S = i+(i-im_c)*K1;
-                        T = j+(j-im_c)*K2;
-                        tep1(:,:) = exp(pa*((S-X).*(S-X)));
-                        tep2(:,:) = exp(pa*((T-Y).*(T-Y)));
-                        norm_ker = tep1.*tep2/sum(tep1(:).*tep2(:));
-                        im_distorted = im_distorted+im_o(i,j)*norm_ker;
+            K1 = p(1)*U1+p(2)*V1;
+            K2 = p(3)*U1+p(4)*V1+p(5)*U1.^2+p(6)*V1.^2;
+            K3 = p(7)*U1+p(8)*V1;
+            K4 = p(9)*U1+p(10)*V1+p(11)*U1.^2+p(12)*V1.^2;
+            for x = 1:imo_size(1)
+                for y = 1:imo_size(2)
+                    if im_o(x,y)~=0
+                        S = U1+(x-im_c)^2*K1+(x-im_c)*K2;
+                        T = V1+(y-im_c)^2*K3+(y-im_c)*K4;
+                        tep1(:,:) = exp(pa*((S-(x-im_c)).*(S-(x-im_c))));
+                        tep2(:,:) = exp(pa*((T-(y-im_c)).*(T-(y-im_c))));
+                        norm_tep = sum(tep1(:).*tep2(:));
+                        if (norm_tep~= 0)
+                            norm_ker = tep1.*tep2/norm_tep;
+                        else
+                            norm_ker = tep1.*tep2;
+                        end
+                        im_distorted = im_distorted+im_o(x,y)*norm_ker;
                     end
                 end
 
@@ -86,22 +98,29 @@ function result = FDis_Sim(imname,mode_flag,p,FLUX,expand_D,noise_ctrl,noise_par
         % Calculating the distorted kernel and image for log-distortions.
         case 'log_sim'
             disp('call log sim');
-            K_log1 = p(1)*log(1+p(2)*X1.^2+p(3)*Y1.^2);
-            K_log2 = p(4)*log(1+p(5)*X1.^2+p(6)*Y1.^2);
-            for i = 1:imo_size(1)
-                for j = 1:imo_size(2)
-                    if im_o(i,j)~=0
-                        S = i+(i-im_c)*K_log1;
-                        T = j+(j-im_c)*K_log2;
-                        tep1(:,:) = exp(pa*((S-X).*(S-X)));
-                        tep2(:,:) = exp(pa*((T-Y).*(T-Y)));
-                        norm_ker = tep1.*tep2/sum(tep1(:).*tep2(:));
-                        im_distorted = im_distorted+im_o(i,j)*norm_ker;
+            K_log1 = p(1)*log(1+p(2)*U1.^2+p(3)*V1.^2);
+            K_log2 = p(4)*log(1+p(5)*U1.^2+p(6)*V1.^2);
+            for x = 1:imo_size(1)
+                for y = 1:imo_size(2)
+                    if im_o(x,y)~=0
+                        S = U1+(x-im_c)*K_log1;
+                        T = V1+(y-im_c)*K_log2;
+                        tep1(:,:) = exp(pa*((S-(x-im_c)).*(S-(x-im_c))));
+                        tep2(:,:) = exp(pa*((T-(y-im_c)).*(T-(y-im_c))));
+                        norm_tep = sum(tep1(:).*tep2(:));
+                        if (norm_tep~= 0)
+                            norm_ker = tep1.*tep2/norm_tep;
+                        else
+                            norm_ker = tep1.*tep2;
+                        end
+                        im_distorted = im_distorted+im_o(x,y)*norm_ker;
                     end
                 end
             end
     end
-    
+
+
+    % Poisson Noise
     if (strcmp(noise_ctrl,'true'))
         Noise = poissrnd(noise_parameter,imo_size(1),imo_size(2));
         img_dist = FLUX*im_distorted+Noise;
